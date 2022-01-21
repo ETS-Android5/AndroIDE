@@ -1,0 +1,133 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdk
+	buildToolsVersion rootProject.ext.buildTools
+	
+    defaultConfig {
+        applicationId rootProject.ext.packageName
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.targetSdk
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        
+		multiDexEnabled true
+		vectorDrawables.useSupportLibrary = true
+    }
+	
+	compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility rootProject.ext.javaSourceVersion
+        targetCompatibility rootProject.ext.javaTargetVersion
+    }
+	
+	lintOptions {
+		abortOnError false
+		disable "VectorPath",
+				"NestedWeights",
+				"ContentDescription",
+                "SmallSp"
+    }
+	
+	buildFeatures {
+        viewBinding true
+    }
+    
+    signingConfigs {
+        
+        debug {
+            storeFile file("dev.keystore")
+            keyAlias "androidide"
+            storePassword "ed68424fb109e5aa8146e4b86caa72e3"
+            keyPassword "ed68424fb109e5aa8146e4b86caa72e3"
+        }
+        
+        release {
+            storeFile file("dev.keystore")
+            keyAlias "androidide"
+            storePassword "ed68424fb109e5aa8146e4b86caa72e3"
+            keyPassword "ed68424fb109e5aa8146e4b86caa72e3"
+        }
+    }
+    
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+	
+	packagingOptions {
+		exclude 'META-INF/eclipse.inf'
+		exclude 'about_files/LICENSE-2.0.txt'
+		exclude 'plugin.xml'
+		exclude 'plugin.properties'
+        exclude 'about.mappings'
+        exclude 'about.properties'
+        exclude 'about.ini'
+        exclude 'modeling32.png'
+	}
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+
+    // Annotation processors
+	annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+	
+	implementation common.utilcode
+	implementation common.file_picker
+	implementation common.glide
+	implementation common.quickaction
+    implementation common.bll
+	implementation common.xml2json
+	implementation google.gson
+	implementation google.guava
+	
+    implementation common.jsoup
+    
+	// AndroidX
+	implementation androidx.annotation
+	implementation androidx.appcompat
+	implementation androidx.cardview
+	implementation androidx.constraintlayout
+	implementation androidx.coordinatorlayout
+	implementation androidx.drawer
+    implementation androidx.grid
+	implementation androidx.preference
+	implementation androidx.recyclerview
+	implementation androidx.vectors
+	implementation androidx.animated_vectors
+    implementation google.material
+	
+	// Firebase
+	implementation platform('com.google.firebase:firebase-bom:29.0.0')
+	implementation 'com.google.firebase:firebase-analytics'
+	implementation 'com.google.firebase:firebase-crashlytics'
+	implementation 'com.google.firebase:firebase-messaging'
+    
+	// Local projects here
+	implementation project(':treeview')
+    implementation project(':emulatorview')
+    implementation project(':xml-inflater')
+    implementation project(':lexers')
+    implementation project(':common')
+
+    implementation project(':lsp:api')
+    implementation project(':lsp:java')
+    
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	
+	coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+}
